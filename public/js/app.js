@@ -7,7 +7,7 @@ angular.module('myApp', [
   'myApp.filters',
   'myApp.services',
   'myApp.directives',
-
+  'd3',
   // 3rd party dependencies
   'btford.socket-io'
 ]).

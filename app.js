@@ -4,6 +4,7 @@
  */
 
 var express = require('express'),
+  _ = require('lodash'),
   routes = require('./routes'),
   api = require('./routes/api'),
   http = require('http'),
@@ -35,7 +36,7 @@ if (app.get('env') === 'development') {
 // production only
 if (app.get('env') === 'production') {
   // TODO
-};
+}
 
 
 /**
@@ -62,3 +63,16 @@ io.sockets.on('connection', require('./routes/socket'));
 server.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+function sendData(socket) {
+  return function() {
+    data = [];
+      for(var i = 0; i < 36; i++) {
+        data.push(
+          { axis: i * 10, value: Math.floor((Math.random() * 100) + 1) }
+        );
+      }
+
+      socket.emit('data', data );
+    };
+}

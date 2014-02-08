@@ -1,4 +1,7 @@
 /* app css stylesheet */
+.body {
+  background-color: #000000
+}
 
 .menu {
   list-style: none;
