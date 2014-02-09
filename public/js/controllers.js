@@ -5,7 +5,6 @@
 angular.module('myApp.controllers', []).
   controller('AppCtrl', function ($scope, socket) {
     socket.on('data', function (data) {
-      console.log("ctrl data: " + data);
       $scope.data = [data];
     });
   }).
