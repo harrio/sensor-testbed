@@ -1,7 +1,7 @@
 /* app css stylesheet */
-.body {
+/*body {
   background-color: #000000
-}
+}*/
 
 .menu {
   list-style: none;
@@ -30,4 +30,18 @@
 .menu > li:nth-child(1):before {
   content: "";
   padding: 0;
+}
+
+fieldset label {  
+  float: left;
+  width: 10em;        
+  margin-right: 1em;
+}
+
+select {
+  width: 50px;
+}
+
+button {
+  float: left;
 }

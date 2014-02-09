@@ -35,14 +35,20 @@ function send(socket, data) {
   }
 }
 
-exports.init = function(io) {
+exports.init = function(io, serialPort) {
   io.sockets.on('connection', function (socket) {
   console.log("conn");
   //setInterval(sendData(socket), 1000);
-  client = socket;
-  send(client, emptyArray());
-    socket.on('my other event', function (data) {
-      console.log(data);
+    client = socket;
+    send(client, emptyArray());
+    socket.on('config', function (config) {
+      console.log(config);
+      serialPort.write(config.step +
+      " " + config.sampleSize +
+      "\n", function(err, results) {
+        console.log('err ' + err);
+        console.log('results ' + results);
+      });
     });
   });
 };

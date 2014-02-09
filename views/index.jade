@@ -4,19 +4,17 @@ block body
   div(ng-controller='AppCtrl')
     div(style='width:100%, display:block')
       div(radar data='data' style='float:left')
+      form(novalidate class='simple-form')
+        fieldset(class='main')
+          div
+            label(for='step') Step 
+            select(id='step' ng-model='config.step' ng-options='s for s in steps')
+          div
+            label(for='samples') Samples 
+            select(id='samples' ng-model='config.sampleSize' ng-options='s for s in samples')
+          button(ng-click='save(config)').
+            Save
 
-    h2 Hello {{name}}
-    ul.menu
-      li
-        a(href='view1') view1
-      li
-        a(href='view2') view2
-
-    div(ng-view)
-
-    div
-      | Angular Socket.io seed app: v
-      span(app-version)
 
   script(src='/socket.io/socket.io.js')
   script(src='bower_components/angular/angular.js')
