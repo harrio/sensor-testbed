@@ -12,6 +12,9 @@ block body
           div
             label(for='samples') Samples 
             select(id='samples' ng-model='config.sampleSize' ng-options='s for s in samples')
+          div
+            label(for='range') Range 
+            select(id='range' ng-model='config.range' ng-options='r for r in ranges')
           button(ng-click='save(config)').
             Save
 

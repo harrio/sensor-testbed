@@ -23,7 +23,9 @@ angular.module('myApp.directives', ['d3']).
 
 					scope.render = function(data) {
 						if (data) {
-							RadarChart.draw(element[0], data);
+							RadarChart.draw(element[0], 
+								data,
+								{ maxValue: scope.$parent.config.range });
 						}
 					};
 				});

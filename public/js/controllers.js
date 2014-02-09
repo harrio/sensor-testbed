@@ -16,10 +16,14 @@ angular.module('myApp.controllers', []).
       1, 3, 5, 7, 9
     ];
 
+    $scope.ranges = [
+      50, 100, 150, 200, 250, 300
+    ];
 
     $scope.config = {
       step: $scope.steps[1],
-      sampleSize: $scope.sampleSize = $scope.samples[2]
+      sampleSize: $scope.samples[2],
+      range: $scope.ranges[5]
     };
 
     $scope.save = function(config) {
