@@ -3,10 +3,18 @@
 /* Controllers */
 
 angular.module('myApp.controllers', []).
-  controller('AppCtrl', function ($scope, socket) {
+  controller('RadarCtrl', function ($scope, socket, configService) {
+
     socket.on('data', function (data) {
+      $scope.config = configService.getConfig();
       $scope.data = [data];
     });
+  }).
+  controller('ConfigCtrl', function($scope, $http, socket, configService) {
+    //$http.get('/config/ports').
+    //success(function(data, status, headers, config) {
+    //  $scope.ports = data.ports;
+    //});
 
     $scope.steps = [
       5, 10, 15, 20
@@ -27,15 +35,28 @@ angular.module('myApp.controllers', []).
     };
 
     $scope.save = function(config) {
-      socket.emit('config', config);
+      configService.setConfig(config);
+      $http.post('/setConfig', config).
+      success(function(data) {
+        
+      });
     };
 
-  }).
-  controller('MyCtrl1', function ($scope, socket) {
-    socket.on('send:time', function (data) {
-      $scope.time = data.time;
+    $scope.status = { port: false };
+
+    socket.on('status', function (status) {
+      $scope.status = status;
     });
-  }).
-  controller('MyCtrl2', function ($scope) {
-    // write Ctrl here
+
+    $scope.statusStyle = function () {
+      var color = $scope.status.port ? '#0F0' : '#F00';
+      
+      return { backgroundColor: color };
+    };
+
+    $scope.statusText = function() {
+      return $scope.status.port ? 'UP' : 'DOWN';
+    };
+
   });
+  

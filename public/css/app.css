@@ -39,9 +39,28 @@ fieldset label {
 }
 
 select {
-  width: 50px;
+  width: 100px;
 }
 
 button {
   float: left;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: orange;
+}
+
+.bar:hover {
+  fill: orangered ;
+}
+
+.x.axis path {
+  display: none;
 }

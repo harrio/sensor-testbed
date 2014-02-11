@@ -1,22 +1,28 @@
 extends layout
 
 block body
-  div(ng-controller='AppCtrl')
+  div(ng-controller='RadarCtrl')
     div(style='width:100%, display:block')
       div(radar data='data' style='float:left')
-      form(novalidate class='simple-form')
-        fieldset(class='main')
-          div
-            label(for='step') Step 
-            select(id='step' ng-model='config.step' ng-options='s for s in steps')
-          div
-            label(for='samples') Samples 
-            select(id='samples' ng-model='config.sampleSize' ng-options='s for s in samples')
-          div
-            label(for='range') Range 
-            select(id='range' ng-model='config.range' ng-options='r for r in ranges')
-          button(ng-click='save(config)').
-            Save
+      div(radar-bars data='data' style='float:left')
+  div(ng-controller='ConfigCtrl')
+    form(novalidate class='simple-form')
+      fieldset(class='main')
+        div
+          label(for='port') Serial port 
+          span(ng-style='statusStyle()')
+            {{ statusText() }}
+        div
+          label(for='step') Step 
+          select(id='step' ng-model='config.step' ng-options='s for s in steps')
+        div
+          label(for='samples') Samples 
+          select(id='samples' ng-model='config.sampleSize' ng-options='s for s in samples')
+        div
+          label(for='range') Range 
+          select(id='range' ng-model='config.range' ng-options='r for r in ranges')
+        button(ng-click='save(config)').
+          Save
 
 
   script(src='/socket.io/socket.io.js')
@@ -24,6 +30,7 @@ block body
   script(src='bower_components/angular-socket-io/socket.js')
   script(src='js/d3.js')
   script(src='js/radar-chart.js')
+  script(src='js/radar-bars.js')
   script(src='js/app.js')
   script(src='js/services.js')
   script(src='js/controllers.js')

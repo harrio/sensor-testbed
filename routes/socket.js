@@ -6,6 +6,7 @@ var _ = require('lodash');
 var step = 10;
 var client = null;
 var buffer = emptyArray();
+var simulationId = null;
 
 function emptyArray() {
   var array = [];
@@ -29,10 +30,19 @@ function median(values) {
     return (values[half-1] + values[half]) / 2.0;
 }
 
-function send(socket, data) {
+function send(socket, data, id) {
   if (socket !== null) {
-    socket.emit('data', data );
+    socket.emit(id, data );
   }
+}
+
+function simulate() {
+  var buffer = _.map(emptyArray(),
+    function(item) {
+      item.value  = Math.random() * 300;
+      return item;
+    });
+  send(client, buffer, 'data');
 }
 
 exports.init = function(io, serialPort) {
@@ -53,12 +63,26 @@ exports.init = function(io, serialPort) {
   });
 };
 
+exports.configure = function(config) {
+  console.log(config);
+  serialPort.write(config.step +
+    " " + config.sampleSize +
+    "\n", function(err, results) {
+      console.log('err ' + err);
+      console.log('results ' + results);
+    });
+};
+
+exports.sendStatus = function(status) {
+  send(client, status, 'status');
+}
+
 exports.send = function(data) {
   if (data.indexOf("b") != -1) {
     var values = data.split(" ");
     if (values[1] != step) {
       step = values[1];
-      buffer = emptyArray();  
+      buffer = emptyArray();
     }
   } else if (data.indexOf("e") != -1) {
     //socket.send(buffer);
@@ -76,27 +100,17 @@ exports.send = function(data) {
     var avg = median(_.map(_.initial(values), function(v) { return parseInt(v) }));
     //console.log("med: " + avg);
     buffer[angle / step] = { axis: angle, value: avg, heading: "sweep"};
-    send(client, buffer);
+    send(client, buffer, 'data');
   }
 };
 
-/*
-module.exports = function (socket) {
-  socket.emit('send:name', {
-    name: 'Bob'
-  });
+exports.startSimulation = function() {
+  stopSimulation();
+  simulationId = setInterval(simulate, 1000);
+};
 
-  setInterval(function () {
-    socket.emit('send:time', {
-      time: (new Date()).toString()
-    });
-  }, 1000);
+var stopSimulation = function() {
+  clearInterval(simulationId);
+};
 
-  console.log("conn");
-	//setInterval(sendData(socket), 1000);
-	var client = socket;
-	send(client, emptyArray());
-  socket.on('my other event', function (data) {
-		console.log(data);
-  });
-};*/
+exports.stopSimulation = stopSimulation;

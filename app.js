@@ -21,6 +21,7 @@ var SerialPort = serialport.SerialPort;
 serialPort = new SerialPort("/dev/tty.usbmodem1411",
   { baudrate: 14400,
   parser: serialport.parsers.readline("\n") });
+var portUp = false;
 
 process.on('uncaughtException', function (err) {
   console.error(err);
@@ -62,7 +63,8 @@ app.get('/', routes.index);
 app.get('/partials/:name', routes.partials);
 
 // JSON API
-app.get('/api/name', api.name);
+app.get('/config/ports', api.ports);
+app.post('/setConfig', api.setConfig);
 
 // redirect all others to the index (HTML5 history)
 app.get('*', routes.index);
@@ -79,18 +81,30 @@ server.listen(app.get('port'), function () {
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-try {
-  serialPort.open(function () {
-    console.log('serial open');
-    serialPort.on('data', function(data) {
-      socket.send(data);
-    });
-  //serialPort.write("ls\n", function(err, results) {
-  //  console.log('err ' + err);
-  //  console.log('results ' + results);
-  //});
+var openSerial = function() {
+  console.log("open serial...");
+  serialPort.open(function (err) {
+    if (err) {
+      console.log("serial failed... simulating");
+      socket.startSimulation();
+      setTimeout(openSerial, 5000);
+    } else {
+      console.log('serial open');
+      socket.stopSimulation();
+      portUp = true;
+      socket.sendStatus({ port: portUp });
+      serialPort.on('data', function(data) {
+        socket.send(data);
+      });
+      serialPort.on('error', function(data) {
+        console.log("lost serial, retry");
+        portUp = false;
+        socket.sendStatus({ port: portUp });
+        openSerial();
+      });
+    }
   });
-} catch (err) {
-  console.log("serial port open failed: " + err);
-}
+};
+
+openSerial();
 
