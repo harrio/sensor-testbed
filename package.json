@@ -9,5 +9,11 @@
     "serialport": "1.3.x",
     "lodash": "2.4.x",
     "jade": "1.1.x"
+  },
+  "devDependencies": {
+    "browserify": "~3.28.2",
+    "gulp-rename": "~1.0.0",
+    "gulp": "~3.5.2",
+    "gulp-browserify": "~0.4.4"
   }
 }
