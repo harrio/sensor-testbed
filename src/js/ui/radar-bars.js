@@ -1,4 +1,6 @@
-var RadarBars = {
+var d3 = require('d3');
+
+exports.RadarBars = {
   draw: function(elem, data) {
     d3.select(elem).select("svg").remove();
 

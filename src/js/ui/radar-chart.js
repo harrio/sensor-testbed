@@ -1,4 +1,6 @@
-var RadarChart = {
+var d3 = require('d3');
+
+exports.RadarChart = {
   draw: function(elem, d, options){
     var cfg = {
      radius: 10,
