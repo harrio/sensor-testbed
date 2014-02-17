@@ -17,7 +17,7 @@ exports.radar = function(d3Service) {
           if (data) {
             RadarChart.draw(element[0],
               data,
-              { maxValue: scope.$parent.config.range });
+              { maxValue: scope.$parent.config.range, radians: Math.PI, afterglow: scope.$parent.config.afterglow });
           }
         };
       });

@@ -1,12 +1,12 @@
 var d3 = require('d3');
 
 exports.RadarBars = {
-  draw: function(elem, data) {
+  draw: function(elem, data, getValue) {
     d3.select(elem).select("svg").remove();
 
     var margin = {top: 40, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = 700 - margin.left - margin.right,
+    height = 350 - margin.top - margin.bottom;
 
     var formatPercent = d3.format(".0");
 
@@ -55,8 +55,8 @@ exports.RadarBars = {
       .attr("class", "bar")
       .attr("x", function(d) { return x(d.axis); })
       .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.value); })
-      .attr("height", function(d) { return height - y(d.value); });
+      .attr("y", function(d) { return y(getValue(d)); })
+      .attr("height", function(d) { return height - y(getValue(d)); });
       //.on('mouseover', tip.show)
       //.on('mouseout', tip.hide);
   }

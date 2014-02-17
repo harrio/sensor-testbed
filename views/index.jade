@@ -5,6 +5,7 @@ block body
     div(style='width:100%, display:block')
       div(radar data='data' style='float:left')
       div(radar-bars data='data' style='float:left')
+      div(radar-diff-bars data='data' style='float:left')
   div(ng-controller='configCtrl')
     form(novalidate class='simple-form')
       fieldset(class='main')
@@ -13,17 +14,24 @@ block body
           span(ng-style='statusStyle()')
             {{ statusText() }}
         div
-          label(for='step') Step 
+          label(for='step') Step (deg)
           select(id='step' ng-model='config.step' ng-options='s for s in steps')
         div
-          label(for='samples') Samples 
+          label(for='samples') Pings 
           select(id='samples' ng-model='config.sampleSize' ng-options='s for s in samples')
         div
-          label(for='range') Range 
+          label(for='pingDelay') Ping delay (ms)
+          select(id='pingDelay' ng-model='config.pingDelay' ng-options='p for p in pingDelays')
+        div
+          label(for='range') Display range (cm)
           select(id='range' ng-model='config.range' ng-options='r for r in ranges')
+        div
+          label(for='afterglow') Afterglow
+          select(id='afterglow' ng-model='config.afterglow' ng-options='a for a in afterglows')
         button(ng-click='save(config)').
           Save
-
+  
+  // Include this outside Browserify since it's served by node.js and angular-socket-io needs the client lib from it.
   script(src='/socket.io/socket.io.js')
   script(src='js/bundle.js')
 

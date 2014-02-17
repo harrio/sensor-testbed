@@ -8,6 +8,14 @@ exports.configCtrl = function($scope, $http, mySocket, configService) {
     1, 3, 5, 7, 9
   ];
 
+  $scope.pingDelays = [
+    1, 2, 3, 4, 5
+  ];
+
+  $scope.afterglows = [
+    0, 1, 2, 3, 4
+  ];
+
   $scope.ranges = [
     50, 100, 150, 200, 250, 300
   ];
@@ -15,7 +23,9 @@ exports.configCtrl = function($scope, $http, mySocket, configService) {
   $scope.config = {
     step: $scope.steps[1],
     sampleSize: $scope.samples[2],
-    range: $scope.ranges[5]
+    pingDelay: $scope.pingDelays[4],
+    range: $scope.ranges[5],
+    afterglow: $scope.afterglows[0]
   };
 
   $scope.save = function(config) {

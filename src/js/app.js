@@ -2,7 +2,6 @@
 var angular = require('angular');
 require('ngRoute');
 require('ngSocket');
-//require('socket.io');
 require('./services/d3Service.js');
 
 // Declare app level module which depends on filters, and services
@@ -12,6 +11,7 @@ myApp.controller('radarCtrl', require('./controllers/radarCtrl.js').radarCtrl);
 myApp.controller('configCtrl', require('./controllers/configCtrl.js').configCtrl);
 myApp.directive('radar', require('./directives/radarDirective.js').radar);
 myApp.directive('radarBars', require('./directives/radarBarsDirective.js').radarBars);
+myApp.directive('radarDiffBars', require('./directives/radarBarsDirective.js').radarDiffBars);
 myApp.service('configService', require('./services/configService.js').configService);
 
 myApp.factory('mySocket', function (socketFactory) {

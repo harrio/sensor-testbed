@@ -1,4 +1,5 @@
 var d3 = require('d3');
+var _ = require('lodash');
 
 exports.RadarChart = {
   draw: function(elem, d, options){
@@ -13,7 +14,8 @@ exports.RadarChart = {
      radians: 2 * Math.PI,
      opacityArea: 0.5,
      color: d3.scale.category10(),
-     fontSize: 10
+     fontSize: 10,
+     afterglow: 0
     };
     if('undefined' !== typeof options){
       for(var i in options){
@@ -32,13 +34,17 @@ exports.RadarChart = {
     var tooltip;
     function getPosition(i, range, factor, func){
       factor = typeof factor !== 'undefined' ? factor : 1;
-      return range * (1 - factor * func((i - total / 4) * cfg.radians  / total));
+      return range * (1 - factor * func((i - total / 2) * cfg.radians  / total));
     }
     function getHorizontalPosition(i, range, factor){
       return getPosition(i, range, factor, Math.sin);
     }
     function getVerticalPosition(i, range, factor){
       return getPosition(i, range, factor, Math.cos);
+    }
+    function dotOpacity(series) {
+      var opacity = (series + 1) * 1 / d.length;
+      return opacity;
     }
 
     for(var j=0; j<cfg.levels; j++){
@@ -56,7 +62,8 @@ exports.RadarChart = {
     var axis = g.selectAll(".axis").data(allAxis).enter().append("g").attr("class", "axis");
 
     var strokeColor = function(axis, i) {
-      var heading = d[0][i].heading;
+      var lastData = _.last(d)[i];
+      var heading = lastData ? lastData.heading : null;
       if (heading == "sweep") {
         return "red";
       } else if (heading == "main") {
@@ -67,7 +74,8 @@ exports.RadarChart = {
     };
 
     var strokeWidth = function(axis, i) {
-      var heading = d[0][i].heading;
+      var lastData = _.last(d)[i];
+      var heading = lastData ? lastData.heading : null;
       if (heading == "sweep") {
         return "3px";
       } else {
@@ -122,12 +130,12 @@ exports.RadarChart = {
                          }
                          return str;
                       })
-                     .style("fill", function(j, i){return cfg.color(series)})
+                     .style("fill", function(j, i){return cfg.color(series);})
                      .style("fill-opacity", cfg.opacityArea)
                      .on('mouseover', function (d){
                                         z = "polygon."+d3.select(this).attr("class");
-                                        g.selectAll("polygon").transition(200).style("fill-opacity", 0.1); 
-                                        g.selectAll(z).transition(200).style("fill-opacity", .7);
+                                        g.selectAll("polygon").transition(200).style("fill-opacity", 0.1);
+                                        g.selectAll(z).transition(200).style("fill-opacity", 0.7);
                                       })
                      .on('mouseout', function(){
                                         g.selectAll("polygon").transition(200).style("fill-opacity", cfg.opacityArea);
@@ -154,7 +162,8 @@ exports.RadarChart = {
           return getVerticalPosition(i, cfg.h/2, (Math.max(j.value, 0)/cfg.maxValue)*cfg.factor);
         })
         .attr("data-elem", function(j){return j.axis;})
-        .style("fill", cfg.color(series)).style("fill-opacity", 0.9)
+        .style("fill", "orange").style("fill-opacity", dotOpacity(series))
+        //.style("fill", cfg.color(series)).style("fill-opacity", series * 0.1)
         .on('mouseover', function (d){
                     newX =  parseFloat(d3.select(this).attr('cx')) - 10;
                     newY =  parseFloat(d3.select(this).attr('cy')) - 5;

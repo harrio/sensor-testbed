@@ -18,7 +18,7 @@ var io = require('socket.io').listen(server);
 io.set('log level', 1);
 
 var SerialPort = serialport.SerialPort;
-serialPort = new SerialPort("/dev/tty.usbmodem1411",
+serialPort = new SerialPort("/dev/tty.usbmodem1421",
   { baudrate: 14400,
   parser: serialport.parsers.readline("\n") });
 var portUp = false;
