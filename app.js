@@ -10,7 +10,10 @@ var express = require('express'),
   api = require('./routes/api'),
   socket = require('./routes/socket'),
   http = require('http'),
-  path = require('path');
+  path = require('path'),
+  jf = require('./services/jsonfile');
+
+var config = jf.readFileSync("config.json");
 
 var app = module.exports = express();
 var server = require('http').createServer(app);
@@ -18,7 +21,7 @@ var io = require('socket.io').listen(server);
 io.set('log level', 1);
 
 var SerialPort = serialport.SerialPort;
-serialPort = new SerialPort("/dev/tty.usbmodem1421",
+serialPort = new SerialPort(config.serialPort,
   { baudrate: 14400,
   parser: serialport.parsers.readline("\n") });
 var portUp = false;
