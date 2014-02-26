@@ -1,4 +1,3 @@
-#include <NewPing.h>
 #include <Servo.h> 
 
 const int pingPin = 7;
@@ -25,7 +24,7 @@ void pingAngle(int deg) {
   Serial.print(deg);
   Serial.print(" ");
   for (int i = 0; i < pings; i++) {
-    int cm = ping(deg);
+    int cm = ping();
     // Wait a bit or the sensor gives weird results. 
     delay(pingDelay);
     Serial.print(cm);
@@ -109,7 +108,7 @@ void loop()
 }
 
 
-long ping(int id) {
+long ping() {
   long duration;
 
   // The PING))) is triggered by a HIGH pulse of 2 or more microseconds.
